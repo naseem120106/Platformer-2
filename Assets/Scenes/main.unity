@@ -503,7 +503,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigidBody: {fileID: 785866329}
   playerCamera: {fileID: 963194228}
-  moveSpeed: 2
+  moveSpeed: 6
   move: {fileID: -2210735893296439365, guid: 91916351998819d4986f97550c7b1967, type: 3}
 --- !u!1 &963194225
 GameObject:
