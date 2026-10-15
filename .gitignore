@@ -108,5 +108,6 @@ InitTestScene*.unity*
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
 
+# copy the same thing here with your name instead 
 /Assets/Scenes/naseem.unity
 /Assets/Scenes/naseem.unity.meta
