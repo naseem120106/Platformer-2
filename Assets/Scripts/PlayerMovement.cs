@@ -56,5 +56,11 @@ public class PlayerMovement : MonoBehaviour
         }
             jumpRequested = false;
         }
+    private void OnGUI()
+    {
+        Vector3 flatVelocity = new Vector3(rigidBody.velocity.x, 0f, rigidBody.velocity.z);
+        GUI.Label(new Rect(10, 10, 200, 20), "Velocity: " + flatVelocity.magnitude.ToString("F2"));
+
+        }
     
-    }
+}

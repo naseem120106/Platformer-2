@@ -3,7 +3,12 @@ guid: e45cff78a783cc747b8fff83421497db
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - rigidBody: {instanceID: 0}
+  - playerCamera: {instanceID: 0}
+  - move: {instanceID: 0}
+  - jump: {instanceID: 0}
+  - sprint: {fileID: -2541503108646158206, guid: 91916351998819d4986f97550c7b1967, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
