@@ -34,12 +34,26 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 standingCenter;
     private bool crouchHeld;
     private bool isCrouching;
+//camera position function
+    public Transform cameraPosition;
+    public float standingCameraY = 0.25f;
+    public float crouchingCameraY = -0.1f;
+    public float cameraCrouchSpeed = 10f;
     
+    private void UpdateCameraHeight()
+    {
+        Vector3 pos = cameraPosition.localPosition; 
+        float targetY = isCrouching ? crouchingCameraY : standingCameraY;
+        pos.y = Mathf.Lerp(pos.y, targetY, cameraCrouchSpeed * Time.deltaTime);
+        cameraPosition.localPosition = pos;
+    }
+
     private void Start()
     {
         if (capsule == null) capsule = GetComponent<CapsuleCollider>();
         standingHeight = capsule.height;
         standingCenter = capsule.center;
+        crouchHeight = Mathf.Max(crouchHeight, capsule.radius * 2f);
     }
 
     private void Update()
@@ -54,6 +68,7 @@ public class PlayerMovement : MonoBehaviour
             Debug.Log("grounded: " + isGrounded);
             jumpRequested = true;
         }
+        UpdateCameraHeight();
     }
 
     private void FixedUpdate()
@@ -81,16 +96,17 @@ public class PlayerMovement : MonoBehaviour
     {
         bool wantCrouch = crouchHeld;
 
-        if(isCrouching &&!wantCrouch && !CanStandUp())
+        if(isCrouching && !wantCrouch && !CanStandUp())
             wantCrouch = true;
-        if (wantCrouch && isCrouching) return;
+
+        if (wantCrouch == isCrouching) return;
         isCrouching = wantCrouch;
 
         float height = isCrouching ? crouchHeight : standingHeight; 
     //feet stay on ground 
         float standingBottom = standingCenter.y - standingHeight /2f;
         capsule.height = height;
-        capsule.center = new Vector3(standingCenter.x, standingBottom + height / 2);
+        capsule.center = new Vector3(standingCenter.x, standingBottom + height / 2f, standingCenter.z);
     }
     private bool CanStandUp()
     {
