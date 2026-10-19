@@ -83,7 +83,7 @@ the game).
 
 |ID|Core Feature| responsible|
 |---|---|---|
-|C1| Movement with water resistance feel (can do this on a normal plane) | |
+|C1| Movement with water resistance feel (can do this on a normal plane) | Naseem |
 |C2|One test level with solid platform and one other platform type| |
 |C3|Treasure on the map, updates counter and does win message when all is collected | |
 |C4| checkpoint respawn | |
