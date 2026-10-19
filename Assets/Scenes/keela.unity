@@ -333,11 +333,11 @@ GameObject:
   - component: {fileID: 785866333}
   - component: {fileID: 785866332}
   - component: {fileID: 785866331}
-  - component: {fileID: 785866330}
   - component: {fileID: 785866329}
   - component: {fileID: 785866334}
   - component: {fileID: 785866335}
   - component: {fileID: 785866336}
+  - component: {fileID: 785866337}
   m_Layer: 0
   m_Name: player
   m_TagString: Untagged
@@ -372,27 +372,6 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 1
---- !u!135 &785866330
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 785866328}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &785866331
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -511,6 +490,10 @@ MonoBehaviour:
   groundCheckDistance: 1.1
   sprint: {fileID: -2541503108646158206, guid: 91916351998819d4986f97550c7b1967, type: 3}
   sprintMultiplier: 1.8
+  crouch: {fileID: 7576010677084888198, guid: 91916351998819d4986f97550c7b1967, type: 3}
+  capsule: {fileID: 0}
+  crouchHeight: 0.5
+  crouchSpeedMultiplier: 0.5
 --- !u!114 &785866336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -526,6 +509,29 @@ MonoBehaviour:
   spawnPosition: {x: 0, y: 1, z: 0}
   deathHeight: -15
   rb: {fileID: 785866329}
+--- !u!136 &785866337
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 785866328}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
