@@ -95,16 +95,28 @@ public class PlayerMovement : MonoBehaviour
         Vector3 direction = Vector3.ClampMagnitude( forward * moveDirection.y + right * moveDirection.x, 1f );
 
         float currentSpeed = isSprinting ? moveSpeed * sprintMultiplier : moveSpeed;
-        if (isCrouching) currentSpeed *= crouchSpeedMultiplier;
 
+        float currentAcceleration = acceleration;
+        float currentDeceleration = deceleration;
+        float currentGravityScale = gravityScale;
+
+        if(isCrouching) 
+            currentSpeed *= crouchSpeedMultiplier;
+        if (isInWater)
+        {
+            currentSpeed *= waterSpeedMultiplier;
+            currentAcceleration *= waterResistance;
+            currentDeceleration *= waterResistance;
+            currentGravityScale = waterGravityScale;
+        }
         Vector3 targetVelocity = direction * currentSpeed;
-        Vector3 flatVelocity = new Vector3 (rigidBody.velocity.x, 0f, rigidBody.velocity.z);
-        float rate = direction.sqrMagnitude > 0.01f ? acceleration : deceleration;
+        Vector3 flatVelocity = new(rigidBody.velocity.x, 0f, rigidBody.velocity.z);
+        float rate = direction.sqrMagnitude > 0.01f ? currentAcceleration : currentDeceleration;
         if(!isGrounded) rate *= 0.5f;
         flatVelocity = Vector3.MoveTowards(flatVelocity, targetVelocity, rate * Time.fixedDeltaTime);
 
 
-        rigidBody.AddForce(Physics.gravity * gravityScale, ForceMode.Acceleration);
+        rigidBody.AddForce(Physics.gravity * currentGravityScale, ForceMode.Acceleration);
         float verticalSpeed = Mathf.Max (rigidBody.velocity.y, -maxFallSpeed);
         
         rigidBody.velocity = new Vector3(flatVelocity.x, verticalSpeed, flatVelocity.z);
