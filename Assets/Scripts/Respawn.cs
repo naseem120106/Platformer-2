@@ -5,12 +5,25 @@ using UnityEngine.InputSystem;
 
 public class Respawn : MonoBehaviour
 {
-    Vector3 spawnPosition = new Vector3(0, 1, 0); // The position where the player will respawn
+    public Vector3 spawnPosition = new Vector3(0, 1, 0); // The position where the player will respawn
+
+    public double deathHeight = -15;
+    public Rigidbody rb;
 
 
+    void start()
+    {
+        // Remember where the player starts
+        spawnPosition = transform.position;
+        // Find the Rigidbody if one isn't assigned
+        if (rb == null)
+        {
+            rb = GetComponent<Rigidbody>();
+        }
+    }
 
     // Respawns the player when they die
-    void RespawnPlayer()
+    public void RespawnPlayer()
     {
         transform.position = spawnPosition;
     }
@@ -19,7 +32,7 @@ public class Respawn : MonoBehaviour
     void Update()
     {
         //if y is -15 then the player should respawn
-        if (transform.position.y < -15)
+        if (transform.position.y < deathHeight)
         {
             RespawnPlayer();
         }
