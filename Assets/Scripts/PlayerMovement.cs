@@ -39,6 +39,16 @@ public class PlayerMovement : MonoBehaviour
     public float standingCameraY = 0.25f;
     public float crouchingCameraY = -0.1f;
     public float cameraCrouchSpeed = 10f;
+//water resistance function
+    public float waterResistance = 0.5f;
+    public float deceleration = 6f;
+    public float acceleration = 10f;
+    public float maxFallSpeed = 4f;
+    public float waterDrag = 2f;
+    public float gravityScale = 1f;
+    public bool isInWater; 
+    public float waterGravityScale = 0.2f;
+    public float waterSpeedMultiplier = 0.6f;
     
     private void UpdateCameraHeight()
     {
@@ -54,6 +64,7 @@ public class PlayerMovement : MonoBehaviour
         standingHeight = capsule.height;
         standingCenter = capsule.center;
         crouchHeight = Mathf.Max(crouchHeight, capsule.radius * 2f);
+        rigidBody.useGravity = false;//scaled version 
     }
 
     private void Update()
@@ -63,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
         crouchHeld = crouch != null && crouch.action.IsPressed();
 
         isSprinting = sprint != null && sprint.action.IsPressed();
-        if (jump.action.WasPressedThisFrame())
+        if (jump != null && jump.action.WasPressedThisFrame())
         {
             Debug.Log("grounded: " + isGrounded);
             jumpRequested = true;
@@ -81,10 +92,23 @@ public class PlayerMovement : MonoBehaviour
         forward.y = 0f; // so u dont fall in the floor
         right.y = 0f;
 
-        Vector3 direction = forward * moveDirection.y + right * moveDirection.x;
+        Vector3 direction = Vector3.ClampMagnitude( forward * moveDirection.y + right * moveDirection.x, 1f );
 
-        float currrentSpeed = isSprinting ? moveSpeed * sprintMultiplier : moveSpeed;
-        rigidBody.velocity = new Vector3(direction.x * currrentSpeed, rigidBody.velocity.y, direction.z * currrentSpeed);
+        float currentSpeed = isSprinting ? moveSpeed * sprintMultiplier : moveSpeed;
+        if (isCrouching) currentSpeed *= crouchSpeedMultiplier;
+
+        Vector3 targetVelocity = direction * currentSpeed;
+        Vector3 flatVelocity = new Vector3 (rigidBody.velocity.x, 0f, rigidBody.velocity.z);
+        float rate = direction.sqrMagnitude > 0.01f ? acceleration : deceleration;
+        if(!isGrounded) rate *= 0.5f;
+        flatVelocity = Vector3.MoveTowards(flatVelocity, targetVelocity, rate * Time.fixedDeltaTime);
+
+
+        rigidBody.AddForce(Physics.gravity * gravityScale, ForceMode.Acceleration);
+        float verticalSpeed = Mathf.Max (rigidBody.velocity.y, -maxFallSpeed);
+        
+        rigidBody.velocity = new Vector3(flatVelocity.x, verticalSpeed, flatVelocity.z);
+        
         if (jumpRequested && isGrounded)
         {
             rigidBody.velocity = new Vector3(rigidBody.velocity.x,jumpForce, rigidBody.velocity.z);
