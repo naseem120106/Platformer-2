@@ -1,5 +1,5 @@
 {
-    "name": "Platformer-2",
+    "name": "PlayerControls",
     "maps": [
         {
             "name": "Player",
@@ -27,6 +27,15 @@
                     "name": "Fire",
                     "type": "Button",
                     "id": "5b007275-4a1b-4b31-b3d9-3b06d9d767cc",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "jump ",
+                    "type": "Button",
+                    "id": "386c3b60-6319-4415-a928-d58d70440498",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -251,6 +260,17 @@
                     "processors": "",
                     "groups": "XR",
                     "action": "Fire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e448bb6f-c3f9-4113-9eda-1d16623ad29b",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "jump ",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
