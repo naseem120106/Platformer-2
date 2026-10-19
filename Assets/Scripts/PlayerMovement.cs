@@ -15,15 +15,21 @@ public class PlayerMovement : MonoBehaviour
 
     public InputActionReference move;
 
-    public InputActionReference jump; 
+    public InputActionReference jump; //jumping  function 
     public float jumpForce = 5f;
     public float groundCheckDistance = 1.1f;
     private bool jumpRequested;
     private bool isGrounded;
+
+    public InputActionReference sprint;
+    public float sprintMultiplier = 1.8f;
+    private bool isSprinting;
+
     private void Update()
     {
         moveDirection = move.action.ReadValue<Vector2>();
 
+        isSprinting = sprint != null && sprint.action.IsPressed();
         if (jump.action.WasPressedThisFrame())
         {
             Debug.Log("grounded: " + isGrounded);
@@ -42,7 +48,8 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 direction = forward * moveDirection.y + right * moveDirection.x;
 
-        rigidBody.velocity = new Vector3(direction.x * moveSpeed, rigidBody.velocity.y, direction.z * moveSpeed);
+        float currrentSpeed = isSprinting ? moveSpeed * sprintMultiplier : moveSpeed;
+        rigidBody.velocity = new Vector3(direction.x * currrentSpeed, rigidBody.velocity.y, direction.z * currrentSpeed);
         if (jumpRequested && isGrounded)
         {
             rigidBody.velocity = new Vector3(rigidBody.velocity.x,jumpForce, rigidBody.velocity.z);
