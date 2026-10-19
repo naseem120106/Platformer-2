@@ -10,7 +10,7 @@ public class Respawn : MonoBehaviour
 
 
     // Respawns the player when they die
-    void Respawn()
+    void RespawnPlayer()
     {
         transform.position = spawnPosition;
     }
@@ -21,7 +21,7 @@ public class Respawn : MonoBehaviour
         //if y is -15 then the player should respawn
         if (transform.position.y < -15)
         {
-            Respawn();
+            RespawnPlayer();
         }
     }
 }
