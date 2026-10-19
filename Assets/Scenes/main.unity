@@ -337,6 +337,8 @@ GameObject:
   - component: {fileID: 785866329}
   - component: {fileID: 785866334}
   - component: {fileID: 785866335}
+  - component: {fileID: 785866336}
+  - component: {fileID: 785866337}
   m_Layer: 0
   m_Name: player
   m_TagString: Untagged
@@ -505,6 +507,39 @@ MonoBehaviour:
   playerCamera: {fileID: 963194228}
   moveSpeed: 6
   move: {fileID: -2210735893296439365, guid: 91916351998819d4986f97550c7b1967, type: 3}
+  jump: {fileID: 3577106522072451045, guid: 91916351998819d4986f97550c7b1967, type: 3}
+  jumpForce: 5
+  groundCheckDistance: 1.1
+--- !u!114 &785866336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 785866328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6141c05cbb2f8049bbf83b333d447e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnPosition: {x: 0, y: 100, z: 0}
+  deathHeight: -15
+  rb: {fileID: 785866329}
+--- !u!114 &785866337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 785866328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6141c05cbb2f8049bbf83b333d447e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnPosition: {x: 0, y: 1, z: 0}
+  deathHeight: -15
+  rb: {fileID: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
