@@ -505,6 +505,9 @@ MonoBehaviour:
   playerCamera: {fileID: 963194228}
   moveSpeed: 6
   move: {fileID: -2210735893296439365, guid: 91916351998819d4986f97550c7b1967, type: 3}
+  jump: {fileID: 3577106522072451045, guid: 91916351998819d4986f97550c7b1967, type: 3}
+  jumpForce: 5
+  groundCheckDistance: 1.1
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -713,7 +716,7 @@ Transform:
   m_GameObject: {fileID: 1329148827}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -1.51, y: 0, z: -0.45}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
