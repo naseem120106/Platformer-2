@@ -339,6 +339,7 @@ GameObject:
   - component: {fileID: 785866335}
   - component: {fileID: 785866336}
   - component: {fileID: 785866337}
+  - component: {fileID: 785866338}
   m_Layer: 0
   m_Name: player
   m_TagString: Untagged
@@ -526,6 +527,21 @@ MonoBehaviour:
   deathHeight: -15
   rb: {fileID: 785866329}
 --- !u!114 &785866337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 785866328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6141c05cbb2f8049bbf83b333d447e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnPosition: {x: 0, y: 1, z: 0}
+  deathHeight: -15
+  rb: {fileID: 0}
+--- !u!114 &785866338
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
