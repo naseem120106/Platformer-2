@@ -20,7 +20,7 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.06367925, g: 0.5, b: 0.080835275, a: 1}
+  m_AmbientSkyColor: {r: 0.08629838, g: 0.21698111, b: 0.07471519, a: 1}
   m_AmbientEquatorColor: {r: 0.16153437, g: 0.18872376, b: 0.20754719, a: 1}
   m_AmbientGroundColor: {r: 0.026210386, g: 0.20370542, b: 0.2924528, a: 1}
   m_AmbientIntensity: 1
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028331, g: 0.2257133, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.05175774, g: 0.18017535, b: 0.20532219, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1290,6 +1290,8 @@ MonoBehaviour:
   jump: {fileID: 3577106522072451045, guid: 91916351998819d4986f97550c7b1967, type: 3}
   jumpForce: 4.5
   groundCheckDistance: 5.5
+  jumpBufferTime: 0.15
+  coyoteTime: 0.12
   sprint: {fileID: -2541503108646158206, guid: 91916351998819d4986f97550c7b1967, type: 3}
   sprintMultiplier: 1
   crouch: {fileID: 7576010677084888198, guid: 91916351998819d4986f97550c7b1967, type: 3}
@@ -1694,13 +1696,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1101186394}
   serializedVersion: 2
-<<<<<<< HEAD
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: -0.65, z: 0}
-=======
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
->>>>>>> 1245442d130620385f01d8f64a05dcf349986c73
   m_LocalScale: {x: 10, y: 1, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2200,16 +2197,7 @@ SceneRoots:
   - {fileID: 157485974}
   - {fileID: 1329148831}
   - {fileID: 785866333}
-<<<<<<< HEAD
-  - {fileID: 1101186398}
   - {fileID: 497151335}
-  - {fileID: 674137676}
-  - {fileID: 475670779}
-  - {fileID: 1182163003}
-  - {fileID: 417177749}
-  - {fileID: 42994466}
-=======
   - {fileID: 321798177}
   - {fileID: 84854606}
   - {fileID: 1965444770}
->>>>>>> 1245442d130620385f01d8f64a05dcf349986c73
