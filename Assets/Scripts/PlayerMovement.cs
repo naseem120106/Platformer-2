@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
 
     public InputActionReference move;
 
-//jumping  function 
+//variables for the jumping  function 
     public InputActionReference jump; 
     public float jumpForce = 5f;
     public float groundCheckDistance = 1.1f;
@@ -29,10 +29,11 @@ public class PlayerMovement : MonoBehaviour
     private float jumpBufferCounter;
     private float coyoteCounter;
 //sprinting function 
+//variables for the sprinting function 
     public InputActionReference sprint;
     public float sprintMultiplier = 1.8f;
     private bool isSprinting;
-//crouching function 
+//variables for the crouching function 
     public InputActionReference crouch;
     public CapsuleCollider capsule;
     public float crouchHeight = 1f;
@@ -41,12 +42,12 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 standingCenter;
     private bool crouchHeld;
     private bool isCrouching;
-//camera position function
+//variables for the camera position function
     public Transform cameraPosition;
     public float standingCameraY = 0.25f;
     public float crouchingCameraY = -0.1f;
     public float cameraCrouchSpeed = 10f;
-//water resistance function
+//variables for the water resistance function
     public float waterResistance = 0.5f;
     public float deceleration = 6f;
     public float acceleration = 10f;
