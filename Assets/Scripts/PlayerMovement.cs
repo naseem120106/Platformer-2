@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,8 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody rigidBody;
 
     public Transform playerCamera;
+    public float mouseSensitivity = 100f;
+    private float xRotation = 0f;
 
     private Vector2 moveDirection;
 
@@ -21,6 +24,10 @@ public class PlayerMovement : MonoBehaviour
     public float groundCheckDistance = 1.1f;
     private bool jumpRequested;
     private bool isGrounded;
+    public float jumpBufferTime = 0.15f;
+    public float coyoteTime = 0.12f;
+    private float jumpBufferCounter;
+    private float coyoteCounter;
 //sprinting function 
     public InputActionReference sprint;
     public float sprintMultiplier = 1.8f;
@@ -60,6 +67,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;// first person mouse 
         if (capsule == null) capsule = GetComponent<CapsuleCollider>();
         standingHeight = capsule.height;
         standingCenter = capsule.center;
@@ -67,8 +76,24 @@ public class PlayerMovement : MonoBehaviour
         rigidBody.useGravity = false;//scaled version 
     }
 
+    private void HandleMouseLook()
+    {
+        Vector2 mouseDelta = Mouse.current.delta.ReadValue();
+        float mouseX = mouseDelta.x * mouseSensitivity * Time.deltaTime;
+        float mouseY = mouseDelta.y * mouseSensitivity * Time.deltaTime; 
+        //look up and down 
+        xRotation -= mouseY;
+        xRotation = Math.Clamp(xRotation, -90f, 90f);
+        playerCamera.localRotation = Quaternion.Euler(xRotation,0f,0f);
+
+        //look left and right 
+        transform.Rotate(Vector3.up * mouseX);
+    }
+
     private void Update()
     {
+        HandleMouseLook();
+
         moveDirection = move.action.ReadValue<Vector2>();
 
         crouchHeld = crouch != null && crouch.action.IsPressed();
@@ -80,12 +105,20 @@ public class PlayerMovement : MonoBehaviour
             jumpRequested = true;
         }
         UpdateCameraHeight();
+// release cursor when press escape 
+        if(Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
     }
 
     private void FixedUpdate()
     {
         HandleCrouch();
         isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance);
+        if (isGrounded) coyoteCounter = coyoteTime; else coyoteCounter -= Time.fixedDeltaTime;
+        if (jumpRequested) jumpBufferCounter = jumpBufferTime; else jumpBufferCounter -= Time.fixedDeltaTime;
         Vector3 forward = playerCamera.forward;
         Vector3 right = playerCamera.right;
 
@@ -121,12 +154,14 @@ public class PlayerMovement : MonoBehaviour
         
         rigidBody.velocity = new Vector3(flatVelocity.x, verticalSpeed, flatVelocity.z);
         
-        if (jumpRequested && isGrounded)
+        if (jumpBufferCounter > 0f && coyoteCounter > 0f)
         {
-            rigidBody.velocity = new Vector3(rigidBody.velocity.x,jumpForce, rigidBody.velocity.z);
+            rigidBody.velocity = new Vector3(rigidBody.velocity.x, jumpForce, rigidBody.velocity.z);
+            jumpBufferCounter = 0f;
+            coyoteCounter = 0f;
         }
-            jumpRequested = false;
-        }
+        jumpRequested = false;
+    }
 
     private void HandleCrouch()
     {
