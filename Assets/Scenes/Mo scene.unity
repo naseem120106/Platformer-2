@@ -1962,8 +1962,8 @@ MonoBehaviour:
   moveSpeed: 2.5
   move: {fileID: -2210735893296439365, guid: 91916351998819d4986f97550c7b1967, type: 3}
   jump: {fileID: 3577106522072451045, guid: 91916351998819d4986f97550c7b1967, type: 3}
-  jumpForce: 4.5
-  groundCheckDistance: 4.4
+  jumpForce: 5
+  groundCheckDistance: 4.9
   jumpBufferTime: 0.15
   coyoteTime: 0.12
   sprint: {fileID: -2541503108646158206, guid: 91916351998819d4986f97550c7b1967, type: 3}
@@ -2004,7 +2004,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6141c05cbb2f8049bbf83b333d447e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deathHeight: -5
+  deathHeight: -3
   rb: {fileID: 785866329}
 --- !u!136 &785866337
 CapsuleCollider:
