@@ -8,9 +8,8 @@ public class PlayerMovement : MonoBehaviour
 {
     public Rigidbody rigidBody;
 
+    // The camera the player looks through; PlayerCamera.cs is the only script that rotates it
     public Transform playerCamera;
-    public float mouseSensitivity = 100f;
-    private float xRotation = 0f;
 
     private Vector2 moveDirection;
 
@@ -33,6 +32,22 @@ public class PlayerMovement : MonoBehaviour
     public InputActionReference sprint;
     public float sprintMultiplier = 1.8f;
     private bool isSprinting;
+    private bool sprintHeld;
+//variables for the stamina function
+    public float maxStamina = 100f;
+    public float staminaDrainPerSecond = 25f;
+    public float staminaRegenPerSecond = 15f;
+    public float staminaRegenDelay = 1f;       // seconds after sprinting before stamina refills
+    public float minStaminaToSprint = 20f;     // after running out, stamina must recover this much first
+    public float sprintFovIncrease = 10f;      // camera widens while sprinting to show speed
+    public float fovChangeSpeed = 8f;
+    private float stamina;
+    private float staminaRegenTimer;
+    private bool exhausted;
+    private float sprintVisual;                // 0-1, fades the screen tint in and out
+    private Camera playerCam;
+    private float baseFov;
+    private GUIStyle hudStyle;
 //variables for the crouching function 
     public InputActionReference crouch;
     public CapsuleCollider capsule;
@@ -58,6 +73,40 @@ public class PlayerMovement : MonoBehaviour
     public float waterGravityScale = 0.2f;
     public float waterSpeedMultiplier = 0.6f;
     
+    // Sprinting costs stamina; when it runs out the player has to walk until some has recovered
+    private void UpdateSprint()
+    {
+        bool moving = moveDirection.sqrMagnitude > 0.01f;
+        if (exhausted && stamina >= minStaminaToSprint) exhausted = false;
+
+        isSprinting = sprintHeld && moving && !isCrouching && !exhausted;
+
+        if (isSprinting)
+        {
+            stamina = Mathf.Max(0f, stamina - staminaDrainPerSecond * Time.deltaTime);
+            staminaRegenTimer = staminaRegenDelay;
+            if (stamina <= 0f)
+            {
+                exhausted = true;
+                isSprinting = false;
+            }
+        }
+        else
+        {
+            staminaRegenTimer -= Time.deltaTime;
+            if (staminaRegenTimer <= 0f)
+                stamina = Mathf.Min(maxStamina, stamina + staminaRegenPerSecond * Time.deltaTime);
+        }
+
+        // Visual feedback: widen the field of view and fade in a screen tint while sprinting
+        sprintVisual = Mathf.MoveTowards(sprintVisual, isSprinting ? 1f : 0f, 6f * Time.deltaTime);
+        if (playerCam != null)
+        {
+            float targetFov = baseFov + (isSprinting ? sprintFovIncrease : 0f);
+            playerCam.fieldOfView = Mathf.Lerp(playerCam.fieldOfView, targetFov, fovChangeSpeed * Time.deltaTime);
+        }
+    }
+
     private void UpdateCameraHeight()
     {
         Vector3 pos = cameraPosition.localPosition; 
@@ -71,35 +120,31 @@ public class PlayerMovement : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;// first person mouse 
         if (capsule == null) capsule = GetComponent<CapsuleCollider>();
+
+        // Movement sets the velocity directly, so ground friction would cancel it and glue the
+        // player to the floor. Zero friction (combined with Minimum) lets the script control speed.
+        PhysicMaterial noFriction = new PhysicMaterial("PlayerNoFriction");
+        noFriction.dynamicFriction = 0f;
+        noFriction.staticFriction = 0f;
+        noFriction.frictionCombine = PhysicMaterialCombine.Minimum;
+        capsule.material = noFriction;
         standingHeight = capsule.height;
         standingCenter = capsule.center;
         crouchHeight = Mathf.Max(crouchHeight, capsule.radius * 2f);
         rigidBody.useGravity = false;//scaled version 
-    }
-
-    private void HandleMouseLook()
-    {
-        Vector2 mouseDelta = Mouse.current.delta.ReadValue();
-        float mouseX = mouseDelta.x * mouseSensitivity * Time.deltaTime;
-        float mouseY = mouseDelta.y * mouseSensitivity * Time.deltaTime; 
-        //look up and down 
-        xRotation -= mouseY;
-        xRotation = Math.Clamp(xRotation, -90f, 90f);
-        playerCamera.localRotation = Quaternion.Euler(xRotation,0f,0f);
-
-        //look left and right 
-        transform.Rotate(Vector3.up * mouseX);
+        stamina = maxStamina;
+        playerCam = playerCamera.GetComponent<Camera>();
+        if (playerCam != null) baseFov = playerCam.fieldOfView;
     }
 
     private void Update()
     {
-        HandleMouseLook();
-
         moveDirection = move.action.ReadValue<Vector2>();
 
         crouchHeld = crouch != null && crouch.action.IsPressed();
 
-        isSprinting = sprint != null && sprint.action.IsPressed();
+        sprintHeld = sprint != null && sprint.action.IsPressed();
+        UpdateSprint();
         if (jump != null && jump.action.WasPressedThisFrame())
         {
             Debug.Log("grounded: " + isGrounded);
@@ -107,7 +152,7 @@ public class PlayerMovement : MonoBehaviour
         }
         UpdateCameraHeight();
 // release cursor when press escape 
-        if(Keyboard.current.escapeKey.wasPressedThisFrame)
+        if(Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -197,6 +242,39 @@ public class PlayerMovement : MonoBehaviour
         GUI.Label(new Rect(10, 30, 400, 20), "Crouch held: " + crouchHeld + " | Crouching: " + isCrouching);
         GUI.Label(new Rect(10, 50, 400, 20), "Capsule height: " + capsule.height);
 
+        DrawSprintHud();
+    }
+
+    // Stamina bar, "SPRINTING" text and a faint screen tint
+    private void DrawSprintHud()
+    {
+        if (hudStyle == null)
+        {
+            hudStyle = new GUIStyle(GUI.skin.label) { fontSize = 26, fontStyle = FontStyle.Bold, alignment = TextAnchor.MiddleCenter };
+        }
+
+        Color previous = GUI.color;
+
+        if (sprintVisual > 0.01f)
+        {
+            GUI.color = new Color(0.6f, 0.9f, 1f, 0.12f * sprintVisual);
+            GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), Texture2D.whiteTexture);
+        }
+
+        float barWidth = 240f;
+        float barHeight = 18f;
+        Rect bar = new Rect(Screen.width / 2f - barWidth / 2f, Screen.height - 50f, barWidth, barHeight);
+        GUI.color = new Color(0f, 0f, 0f, 0.5f);
+        GUI.DrawTexture(bar, Texture2D.whiteTexture);
+        GUI.color = exhausted ? new Color(0.9f, 0.25f, 0.25f) : (isSprinting ? new Color(1f, 0.8f, 0.2f) : new Color(0.3f, 0.8f, 1f));
+        GUI.DrawTexture(new Rect(bar.x + 2f, bar.y + 2f, (barWidth - 4f) * (stamina / maxStamina), barHeight - 4f), Texture2D.whiteTexture);
+
+        GUI.color = Color.white;
+        if (isSprinting)
+            GUI.Label(new Rect(0, 60, Screen.width, 40), "SPRINTING", hudStyle);
+        else if (exhausted)
+            GUI.Label(new Rect(0, 60, Screen.width, 40), "OUT OF STAMINA", hudStyle);
+
+        GUI.color = previous;
     }
 }
-    

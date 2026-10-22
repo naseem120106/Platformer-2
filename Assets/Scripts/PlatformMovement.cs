@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 
-public class NewBehaviourScript : MonoBehaviour
+public class PlatformMovement : MonoBehaviour
 {
     //Variables that determine the movement of the platform
     public Vector3 moveSpeed = new Vector3(2, 0, 0);
@@ -17,11 +17,16 @@ public class NewBehaviourScript : MonoBehaviour
     public Vector3 maxPosition;
     public Vector3 minPosition;
 
+    // Bodies currently standing on top of this platform; they are carried along with it
+    private readonly HashSet<Rigidbody> riders = new HashSet<Rigidbody>();
+    private Collider platformCollider;
+
 
 
     // Start is called before the first frame update
     void Start()
     {
+        platformCollider = GetComponent<Collider>();
         originalposition = transform.position;
 
         //Calculate the endpoints of the platform's movement
@@ -37,8 +42,30 @@ public class NewBehaviourScript : MonoBehaviour
             timer = switchTimer; // Reset the grace period 
         }
 
-        transform.position += moveSpeed * Time.deltaTime; // Move the platform
+        Vector3 delta = moveSpeed * Time.deltaTime;
+        transform.position += delta; // Move the platform
         timer--;
+
+        // Carry anything standing on the platform by the same amount
+        foreach (Rigidbody rider in riders)
+        {
+            rider.position += delta;
+        }
+    }
+
+    // A body counts as a rider while it is touching the platform from above
+    void OnCollisionStay(Collision collision)
+    {
+        Rigidbody body = collision.rigidbody;
+        if (body == null) return;
+
+        if (body.position.y > platformCollider.bounds.max.y) riders.Add(body);
+        else riders.Remove(body);
+    }
+
+    void OnCollisionExit(Collision collision)
+    {
+        if (collision.rigidbody != null) riders.Remove(collision.rigidbody);
     }
 
     // This function checks if the platform has reached its maximum distance in any direction

@@ -1,17 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
+[DisallowMultipleComponent]
 public class Respawn : MonoBehaviour
 {
-    public Vector3 spawnPosition = new Vector3(0, 1, 0); // The position where the player will respawn
-
     public double deathHeight = -15;
     public Rigidbody rb;
 
+    // The last checkpoint reached; the start position is the default checkpoint
+    private Vector3 spawnPosition;
 
-    void start()
+    void Start()
     {
         // Remember where the player starts
         spawnPosition = transform.position;
@@ -22,16 +20,25 @@ public class Respawn : MonoBehaviour
         }
     }
 
-    // Respawns the player when they die
+    // Called by checkpoints when the player reaches them
+    public void SetCheckpoint(Vector3 position)
+    {
+        spawnPosition = position;
+    }
+
+    // Respawns the player at the last checkpoint
     public void RespawnPlayer()
     {
         transform.position = spawnPosition;
+        if (rb != null)
+        {
+            rb.velocity = Vector3.zero;
+        }
     }
 
     // Update is called once per frame; checks the condition for respawning the player
     void Update()
     {
-        //if y is -15 then the player should respawn
         if (transform.position.y < deathHeight)
         {
             RespawnPlayer();
