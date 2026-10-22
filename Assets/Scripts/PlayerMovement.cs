@@ -23,6 +23,10 @@ public class PlayerMovement : MonoBehaviour
     public float groundCheckDistance = 1.1f;
     private bool jumpRequested;
     private bool isGrounded;
+// max jump
+    private int jumpsUsed = 0;
+    private int maxJumps = 2;
+
     public float jumpBufferTime = 0.15f;
     public float coyoteTime = 0.12f;
     private float jumpBufferCounter;
@@ -162,8 +166,30 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         HandleCrouch();
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance);
-        if (isGrounded) coyoteCounter = coyoteTime; else coyoteCounter -= Time.fixedDeltaTime;
+        //check ground 
+        Vector3 groundOrigin = new Vector3(
+            capsule.bounds.center.x,
+            capsule.bounds.min.y + 0.02f,
+            capsule.bounds.center.z
+        );
+        isGrounded = Physics.Raycast (
+            groundOrigin,
+            Vector3.down,
+            0.12f,
+            Physics.DefaultRaycastLayers,
+            QueryTriggerInteraction.Ignore
+        );
+// reset when grounded
+        if (isGrounded && rigidBody.velocity.y <= 0f)
+        {
+            jumpsUsed = 0;
+            coyoteCounter = coyoteTime;
+        }
+        else
+        {
+            coyoteCounter -= Time.fixedDeltaTime;
+        }
+
         if (jumpRequested) jumpBufferCounter = jumpBufferTime; else jumpBufferCounter -= Time.fixedDeltaTime;
         Vector3 forward = playerCamera.forward;
         Vector3 right = playerCamera.right;
@@ -199,12 +225,23 @@ public class PlayerMovement : MonoBehaviour
         float verticalSpeed = Mathf.Max (rigidBody.velocity.y, -maxFallSpeed);
         
         rigidBody.velocity = new Vector3(flatVelocity.x, verticalSpeed, flatVelocity.z);
-        
-        if (jumpBufferCounter > 0f && coyoteCounter > 0f)
+    //jump max = 2 
+        if (jumpBufferCounter > 0f && jumpsUsed < maxJumps)
         {
-            rigidBody.velocity = new Vector3(rigidBody.velocity.x, jumpForce, rigidBody.velocity.z);
-            jumpBufferCounter = 0f;
-            coyoteCounter = 0f;
+            bool canFirstJump = jumpsUsed == 0 && coyoteCounter > 0f;
+            bool canSecondJump = jumpsUsed == 1 && !isGrounded;
+            if (canFirstJump || canSecondJump)
+            {
+                rigidBody.velocity = new Vector3(
+                    rigidBody.velocity.x,
+                    jumpForce,
+                    rigidBody.velocity.z
+                );
+                jumpsUsed++;
+                jumpBufferCounter = 0f;
+                coyoteCounter = 0f;
+                Debug.Log("jumps used:" + jumpsUsed);
+            }
         }
         jumpRequested = false;
     }
