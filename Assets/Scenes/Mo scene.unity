@@ -150,11 +150,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8053243897719571330, guid: edfc84ab19afa8040afbaf206917d393, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -4.46
       objectReference: {fileID: 0}
     - target: {fileID: 8053243897719571330, guid: edfc84ab19afa8040afbaf206917d393, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -2.02
       objectReference: {fileID: 0}
     - target: {fileID: 8053243897719571330, guid: edfc84ab19afa8040afbaf206917d393, type: 3}
       propertyPath: m_LocalPosition.z
@@ -636,7 +636,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 861436500743902447, guid: 0f50703abc621e54f948ddc5bb146f25, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -3.33
       objectReference: {fileID: 0}
     - target: {fileID: 861436500743902447, guid: 0f50703abc621e54f948ddc5bb146f25, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1963,11 +1963,18 @@ MonoBehaviour:
   move: {fileID: -2210735893296439365, guid: 91916351998819d4986f97550c7b1967, type: 3}
   jump: {fileID: 3577106522072451045, guid: 91916351998819d4986f97550c7b1967, type: 3}
   jumpForce: 4.5
-  groundCheckDistance: 1.1
+  groundCheckDistance: 4.4
   jumpBufferTime: 0.15
   coyoteTime: 0.12
   sprint: {fileID: -2541503108646158206, guid: 91916351998819d4986f97550c7b1967, type: 3}
   sprintMultiplier: 1.8
+  maxStamina: 100
+  staminaDrainPerSecond: 25
+  staminaRegenPerSecond: 15
+  staminaRegenDelay: 1
+  minStaminaToSprint: 20
+  sprintFovIncrease: 10
+  fovChangeSpeed: 8
   crouch: {fileID: 7576010677084888198, guid: 91916351998819d4986f97550c7b1967, type: 3}
   capsule: {fileID: 0}
   crouchHeight: 1
@@ -1979,7 +1986,7 @@ MonoBehaviour:
   waterResistance: 0.5
   deceleration: 6
   acceleration: 10
-  maxFallSpeed: 1
+  maxFallSpeed: 5
   waterDrag: 4
   gravityScale: 1.25
   isInWater: 1
@@ -2086,7 +2093,7 @@ Transform:
   m_GameObject: {fileID: 841287343}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 25, y: 0, z: -10}
+  m_LocalPosition: {x: 22.28, y: 0, z: -10.43}
   m_LocalScale: {x: 8, y: 1, z: 12}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3189,7 +3196,7 @@ Transform:
   m_GameObject: {fileID: 1847828121}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -10, y: 2, z: 0}
+  m_LocalPosition: {x: -10, y: 1.1, z: 0}
   m_LocalScale: {x: 12, y: 1, z: 12}
   m_ConstrainProportionsScale: 0
   m_Children: []
