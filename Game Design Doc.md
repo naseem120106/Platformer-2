@@ -65,6 +65,9 @@ the levels, and how far can they get? (copied from the game concept 2 pdf)
    1. timer to track how quickly the player finishes a level as mentioned in summary about fast they are
    2. HUD: treasure counter, score, timer, last checkpoint status/update, oxygen level
    3. Main menu and pause menu
+   4. Double jump: player can jump up to 2 times in a row until they touch the ground again (ADDITIONAL, unapproved)
+   5. Sprint stamina: sprinting drains a stamina bar, and the player must recover some stamina before sprinting again (ADDITIONAL, unapproved)
+   6. Sprint feedback: "SPRINTING" text, widened field of view and a screen tint while sprinting (ADDITIONAL, unapproved)
 
 once these are approved they will be changed to the same format as the required features section and marked with "(ADDITIONAL)"
 they also say nothing about the camera, but i guess we can just assume its first person since im pretty sure hes mentioned this before in a lecture, until we ask staff - i can prob check on monday before/after the lecture or in lab
@@ -87,6 +90,15 @@ the game).
 |C2|One test level with solid platform and one other platform type| |
 |C3|Treasure on the map, updates counter and does win message when all is collected | |
 |C4| checkpoint respawn | |
+
+### Prototype status
+
+|ID|Status|Notes|
+|---|---|---|
+|C1|Done|Water-feel movement, sprint, crouch, jump (double jump as an additional feature). Zero-friction player collider so the movement script controls speed.|
+|C2|Done|Solid platforms and moving platforms. Moving platforms carry the player while they stand on them.|
+|C3|Done|Treasure counter and score in the HUD, "You win!" message when all treasure is collected.|
+|C4|Done|Start position is the default checkpoint, touching a checkpoint updates it, falling below the death height respawns the player there.|
 
 Pretty much everything depends on c1 being done first
 
