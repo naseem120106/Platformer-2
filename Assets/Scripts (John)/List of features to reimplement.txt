@@ -1,0 +1,17 @@
+List of features to reimplement:
+
+Camera Position
+Respawn
+Checkpoints
+Game Manager
+Platform movement
+Player movement
+Player camera
+
+Player Movement:
+add 3 - 4 jumps plus an initial jump
+add a boost mechanic
+readd crouching
+
+Platform and enemy movement:
+Add a general movement script 
